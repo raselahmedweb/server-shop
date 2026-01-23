@@ -15,11 +15,22 @@ const allowedOrigins = envVars.FRONTEND_URL
 const corsOption = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   origin: (origin: any, callback: any) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
+    // Allow requests with no origin (Expo / mobile apps)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
+
+    // Allow local network IPs (Expo on phone)
+    if (
+      origin.startsWith("http://192.168.") ||
+      origin.startsWith("http://10.")
+    ) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
   },
   methods: "GET, POST, PUT, DELETE, PATCH",
   optionsSuccessStatus: 200,

@@ -8,11 +8,7 @@ import AppError from "../../errorHelpers/AppError";
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const inviteToken = req.headers.authorization;
-    if (!inviteToken) {
-      throw new AppError(httpStatus.NOT_FOUND, "Invitation token not found.");
-    }
-    const user = await UserServices.createUser(req.body, inviteToken);
+    const user = await UserServices.createUser(req.body);
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,

@@ -1,29 +1,15 @@
 import AppError from "../../errorHelpers/AppError";
-import { IUser } from "./user.interface";
+import { IUser, Role } from "./user.interface";
 import { User } from "./user.model";
 import httpStatusCode from "http-status-codes";
 import bcryptjs from "bcryptjs";
 import { envVars } from "../../config/env";
-import { JwtPayload } from "jsonwebtoken";
-import { verifyToken } from "../../utils/jwt";
 
-const createUser = async (payload: Partial<IUser>, inviteToken: string) => {
+const createUser = async (payload: Partial<IUser>) => {
   const { email, password, ...rest } = payload;
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     throw new AppError(httpStatusCode.BAD_REQUEST, "User already exists");
-  }
-
-  const verifiedToken = verifyToken(
-    inviteToken,
-    envVars.JWT_INVITATION_SECRET,
-  ) as JwtPayload;
-
-  if (email !== verifiedToken.email) {
-    throw new AppError(
-      httpStatusCode.BAD_REQUEST,
-      "Please use the same email you received the invitation on.",
-    );
   }
 
   const hashPassword = await bcryptjs.hash(
@@ -34,8 +20,7 @@ const createUser = async (payload: Partial<IUser>, inviteToken: string) => {
   const userData = {
     email,
     password: hashPassword,
-    role: verifiedToken.role,
-    companyId: verifiedToken.companyId,
+    role: Role.CUSTOMER,
     ...rest,
   };
 
