@@ -13,11 +13,7 @@ import { envVars } from "../../config/env";
 
 const credentialsLogin = async (payload: Partial<IUser>) => {
   const { email, password } = payload;
-  // eslint-disable-next-line no-console
-  console.log(email, password);
   const isExistUser = await User.findOne({ email });
-  // eslint-disable-next-line no-console
-  console.log(isExistUser);
   if (!isExistUser) {
     throw new AppError(httpStatusCode.BAD_REQUEST, "Email does not exist");
   }
