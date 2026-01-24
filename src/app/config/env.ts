@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 interface IEnvVarriable {
+  HOST: string;
   PORT: string;
   DB_URL: string;
   NODE_ENV: string;
@@ -22,6 +23,7 @@ interface IEnvVarriable {
 
 const loadEnvVariables = (): IEnvVarriable => {
   const requiredEnvVarriables: string[] = [
+    "HOST",
     "PORT",
     "DB_URL",
     "NODE_ENV",
@@ -44,6 +46,7 @@ const loadEnvVariables = (): IEnvVarriable => {
     }
   });
   return {
+    HOST: process.env.HOST as string,
     PORT: process.env.PORT as string,
     DB_URL: process.env.DB_URL as string,
     NODE_ENV: process.env.NODE_ENV as string,

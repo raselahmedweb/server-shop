@@ -5,14 +5,16 @@ import app from "./app";
 import { envVars } from "./app/config/env";
 import { seedAdmin } from "./app/utils/seedAdmin";
 
+const port = Number(envVars.PORT) || 5001;
+const host = envVars.HOST || "localhost";
 let server: Server;
 
 const startServer = async () => {
   try {
     await mongoose.connect(envVars.DB_URL);
     console.log("Connected to MongoDB");
-    server = app.listen(5000, "192.168.212.13", () => {
-      console.log(`Server is running on http://192.168.212.13:5000`);
+    server = app.listen(port, host, () => {
+      console.log(`Server is running on http://${host}:${port}`);
     });
   } catch (error) {
     console.error("Error starting the server:", error);

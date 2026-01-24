@@ -9,13 +9,16 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-const corsOption = {
-  origin: "*",
-  methods: "GET, POST, PUT, DELETE, PATCH",
-  optionsSuccessStatus: 200,
-  credentials: true,
-};
-app.use(cors(corsOption));
+app.use(
+  cors({
+    origin(origin, cb) {
+      if (!origin) return cb(null, true);
+      if (["http://localhost:8081"].includes(origin)) return cb(null, true);
+      cb(new Error("CORS blocked"));
+    },
+    credentials: true,
+  }),
+);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
