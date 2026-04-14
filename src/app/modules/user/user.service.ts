@@ -4,9 +4,11 @@ import { User } from "./user.model";
 import httpStatusCode from "http-status-codes";
 import bcryptjs from "bcryptjs";
 import { envVars } from "../../config/env";
+import { OtpServices } from "../otp/otp.service";
 
 const createUser = async (payload: Partial<IUser>) => {
   const { email, password, ...rest } = payload;
+  console.log(payload);
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     throw new AppError(httpStatusCode.BAD_REQUEST, "User already exists");
@@ -25,6 +27,12 @@ const createUser = async (payload: Partial<IUser>) => {
   };
 
   const user = await User.create(userData);
+  try {
+    await OtpServices.sendOtp(email as string, userData.name);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("OTP sending failed:", error);
+  }
   const userObj = user.toObject() as Partial<IUser>;
   delete userObj.password;
   return userObj;

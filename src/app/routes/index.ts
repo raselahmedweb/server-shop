@@ -4,12 +4,17 @@ import { AuthRoutes } from "../modules/auth/auth.route";
 import { CategoryRoutes } from "../modules/categories/category.route";
 import { SubCategoryRoutes } from "../modules/subcategories/subcategory.route";
 import { ProductRoutes } from "../modules/products/product.route";
+import { OtpRoutes } from "../modules/otp/otp.route";
 export const router = Router();
 
 const moduleRoutes = [
   {
     path: "/user",
     route: UserRoutes,
+  },
+  {
+    path: "/otp",
+    route: OtpRoutes,
   },
   {
     path: "/auth",

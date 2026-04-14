@@ -9,6 +9,7 @@ export interface IUser {
   _id?: Types.ObjectId;
   name: string;
   email: string;
+  isVerifiedEmail?: boolean;
   phone?: string;
   password: string;
   isDeleted?: boolean;

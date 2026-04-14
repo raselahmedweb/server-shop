@@ -12,6 +12,10 @@ const userSchema = new Schema<IUser>(
       required: true,
       unique: true,
     },
+    isVerifiedEmail: {
+      type: Boolean,
+      default: false,
+    },
     phone: {
       type: String,
     },
