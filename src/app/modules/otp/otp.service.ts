@@ -44,7 +44,7 @@ const sendOtp = async (email: string, name?: string) => {
     await OtpModel.create({
       email,
       otp: hashOtp,
-      expiresAt: Date.now() + 5 * 60 * 1000,
+      expiresAt: Date.now() + 2 * 60 * 1000,
     });
 
     return { otp };
@@ -62,14 +62,14 @@ const verifyEmail = async (payload: Partial<IOTP>) => {
   if (!isExistUser) {
     throw new AppError(httpStatusCode.BAD_REQUEST, "Email does not exist");
   }
-  const isOtpExist = await OtpModel.findOne({ email });
+  const isOtpExist = await OtpModel.findOne({ email }).sort({ expiresAt: -1 });
 
   if (!isOtpExist) {
     throw new AppError(httpStatusCode.BAD_REQUEST, "OTP does not exist");
   }
 
   if (isOtpExpired(isOtpExist.expiresAt)) {
-    throw new AppError(httpStatusCode.BAD_REQUEST, "OTP has expired");
+    throw new AppError(410, "OTP has expired");
   }
 
   const isOtpMatched = await bcryptjs.compare(otp as string, isOtpExist.otp);

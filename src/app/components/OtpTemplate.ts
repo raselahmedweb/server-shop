@@ -26,7 +26,7 @@ export const getOtpTemplate = (otp: string, name?: string) => {
       </div>
 
       <p style="color:#999; font-size:13px;">
-        This OTP is valid for <b>5 minutes</b>.
+        This OTP is valid for <b>2 minutes</b>.
       </p>
 
       <hr style="margin:25px 0; border:none; border-top:1px solid #eee;" />
