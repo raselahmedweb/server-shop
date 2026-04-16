@@ -23,6 +23,9 @@ const sendOtp = async (email: string, name?: string) => {
       user: envVars.NODEMAILER_EMAIL,
       pass: envVars.NODEMAILER_EMAIL_PASSWORD,
     },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 
   const mailOptions = {
